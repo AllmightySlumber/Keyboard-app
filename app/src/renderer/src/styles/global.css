@@ -1,0 +1,44 @@
+:root {
+  --color-primary: oklch(0.55 0.19 280);
+  --color-primary-dark: oklch(0.5 0.2 300);
+  --color-bg: oklch(0.985 0.005 280);
+  --color-bg-soft: oklch(0.97 0.015 280);
+  --color-border: oklch(0.92 0.006 280);
+  --color-text: oklch(0.27 0.02 280);
+  --color-text-muted: oklch(0.5 0.02 280);
+  --color-accent-amber: oklch(0.96 0.05 75);
+  --color-accent-amber-text: oklch(0.5 0.13 60);
+  --color-accent-orange: oklch(0.96 0.05 28);
+  --color-accent-orange-text: oklch(0.5 0.16 28);
+
+  --font-ui: 'Plus Jakarta Sans', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+button {
+  font-family: inherit;
+}
+
+.app-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}

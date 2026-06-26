@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  pseudo       String   @unique
+  createdAt    DateTime @default(now())
+
+  sessions       TypingSession[]
+  friendsOf      Friendship[]    @relation("UserFriends")
+  friendOf       Friendship[]    @relation("FriendOfUser")
+  sentMessages   Message[]       @relation("MessageSender")
+  receivedMessages Message[]     @relation("MessageReceiver")
+  reportsMade    Report[]        @relation("ReportReporter")
+  reportsReceived Report[]       @relation("ReportReported")
+  blocksMade     Block[]         @relation("BlockBlocker")
+  blocksReceived Block[]         @relation("BlockBlocked")
+}
+
+model TypingSession {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  wpm         Float
+  accuracy    Float
+  durationSec Int
+  layout      String
+  createdAt   DateTime @default(now())
+}
+
+model Friendship {
+  id        String   @id @default(uuid())
+  user      User     @relation("UserFriends", fields: [userId], references: [id])
+  userId    String
+  friend    User     @relation("FriendOfUser", fields: [friendId], references: [id])
+  friendId  String
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+
+  @@unique([userId, friendId])
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  sender     User     @relation("MessageSender", fields: [senderId], references: [id])
+  senderId   String
+  receiver   User     @relation("MessageReceiver", fields: [receiverId], references: [id])
+  receiverId String
+  content    String
+  createdAt  DateTime @default(now())
+  readAt     DateTime?
+
+  @@index([senderId, receiverId])
+}
+
+model Block {
+  id        String   @id @default(uuid())
+  blocker   User     @relation("BlockBlocker", fields: [blockerId], references: [id])
+  blockerId String
+  blocked   User     @relation("BlockBlocked", fields: [blockedId], references: [id])
+  blockedId String
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+}
+
+model Report {
+  id             String   @id @default(uuid())
+  reporter       User     @relation("ReportReporter", fields: [reporterId], references: [id])
+  reporterId     String
+  reportedUser   User     @relation("ReportReported", fields: [reportedUserId], references: [id])
+  reportedUserId String
+  reason         String
+  createdAt      DateTime @default(now())
+}
