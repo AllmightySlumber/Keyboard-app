@@ -34,7 +34,7 @@
   },
   "build": {
     "appId": "com.keyboard.typing",
-    "productName": "Clavier",
+    "productName": "Keyboard",
     "electronVersion": "31.7.7",
     "directories": {
       "output": "dist"
@@ -52,16 +52,16 @@
     "mac": {
       "target": "dmg",
       "category": "public.app-category.education",
-      "artifactName": "Clavier-mac.${ext}"
+      "artifactName": "Keyboard-mac.${ext}"
     },
     "win": {
       "target": "nsis",
-      "artifactName": "Clavier-win.${ext}"
+      "artifactName": "Keyboard-win.${ext}"
     },
     "linux": {
       "target": "AppImage",
       "category": "Education",
-      "artifactName": "Clavier-linux.${ext}"
+      "artifactName": "Keyboard-linux.${ext}"
     }
   }
 }

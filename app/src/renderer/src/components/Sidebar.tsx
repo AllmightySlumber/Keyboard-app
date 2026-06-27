@@ -40,7 +40,7 @@ export default function Sidebar(): JSX.Element {
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 6px 22px' }}>
         <img
           src={logo}
-          alt="Clavier"
+          alt="Keyboard"
           style={{
             width: 46,
             height: 46,
@@ -49,7 +49,7 @@ export default function Sidebar(): JSX.Element {
           }}
         />
         <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18 }}>
-          Clavier
+          Keyboard
         </span>
       </div>
 
