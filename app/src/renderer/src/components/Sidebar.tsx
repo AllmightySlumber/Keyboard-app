@@ -95,11 +95,11 @@ export default function Sidebar(): JSX.Element {
                 flex: 'none'
               }}
             >
-              {user.pseudo.slice(0, 2).toUpperCase()}
+              {user.displayName.slice(0, 2).toUpperCase()}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontWeight: 600, fontSize: 13.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {user.pseudo}
+                {user.displayName}
               </div>
               <button
                 onClick={logout}

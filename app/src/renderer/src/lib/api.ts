@@ -30,11 +30,18 @@ async function request<T>(path: string, options: RequestInit = {}, token?: strin
 
 export interface AuthResponse {
   token: string
-  user: { id: string; email: string; pseudo: string }
+  user: { id: string; email: string; displayName: string; pseudo: string }
 }
 
-export function register(email: string, password: string, pseudo: string): Promise<AuthResponse> {
-  return request('/auth/register', { method: 'POST', body: JSON.stringify({ email, password, pseudo }) })
+export function register(
+  email: string,
+  password: string,
+  displayName: string
+): Promise<AuthResponse> {
+  return request('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify({ email, password, displayName })
+  })
 }
 
 export function login(email: string, password: string): Promise<AuthResponse> {
@@ -42,7 +49,7 @@ export function login(email: string, password: string): Promise<AuthResponse> {
 }
 
 export interface LeaderboardEntry {
-  pseudo: string
+  displayName: string
   wpm: number
   accuracy: number
 }
@@ -54,6 +61,7 @@ export function getLeaderboard(token: string): Promise<LeaderboardEntry[]> {
 export interface FriendUser {
   id: string
   pseudo: string
+  displayName: string
 }
 
 export interface FriendRequest {
@@ -108,6 +116,7 @@ export function getBlockedUsers(token: string): Promise<FriendUser[]> {
 export interface FriendActivity {
   id: string
   pseudo: string
+  displayName: string
   wpm: number
   createdAt: string
 }

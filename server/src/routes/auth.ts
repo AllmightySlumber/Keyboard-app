@@ -14,8 +14,32 @@ const registerSchema = z.object({
     .regex(/[a-z]/, 'Le mot de passe doit contenir une lettre minuscule')
     .regex(/[A-Z]/, 'Le mot de passe doit contenir une lettre majuscule')
     .regex(/[0-9]/, 'Le mot de passe doit contenir un chiffre'),
-  pseudo: z.string().min(3).max(24)
+  displayName: z.string().min(2, 'Le nom doit contenir au moins 2 caractères').max(24)
 })
+
+// Strips accents/punctuation/spaces so "Lucas Müller" -> "lucasmuller".
+function slugify(name: string): string {
+  const ascii = name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
+  return ascii || 'user'
+}
+
+// Always appends digits (even if the bare slug is free) so a unique handle
+// can't be found just by guessing someone's first name.
+async function generateUniquePseudo(displayName: string): Promise<string> {
+  const base = slugify(displayName)
+  for (let attempt = 0; attempt < 20; attempt++) {
+    const suffix = Math.floor(100 + Math.random() * 900)
+    const candidate = `${base}${suffix}`
+    const existing = await prisma.user.findUnique({ where: { pseudo: candidate } })
+    if (!existing) return candidate
+  }
+  // Extremely unlikely fallback: widen the suffix range.
+  return `${base}${Date.now().toString().slice(-6)}`
+}
 
 router.post('/register', async (req, res) => {
   const parsed = registerSchema.safeParse(req.body)
@@ -23,24 +47,22 @@ router.post('/register', async (req, res) => {
     const firstIssue = parsed.error.issues[0]
     return res.status(400).json({ error: firstIssue?.message ?? 'Données invalides' })
   }
-  const { email, password, pseudo } = parsed.data
+  const { email, password, displayName } = parsed.data
 
-  const [existingEmail, existingPseudo] = await Promise.all([
-    prisma.user.findUnique({ where: { email } }),
-    prisma.user.findUnique({ where: { pseudo } })
-  ])
+  const existingEmail = await prisma.user.findUnique({ where: { email } })
   if (existingEmail) {
     return res.status(409).json({ error: 'Cet email est déjà utilisé' })
   }
-  if (existingPseudo) {
-    return res.status(409).json({ error: 'Ce pseudo est déjà pris' })
-  }
 
+  const pseudo = await generateUniquePseudo(displayName)
   const passwordHash = await bcrypt.hash(password, 10)
-  const user = await prisma.user.create({ data: { email, passwordHash, pseudo } })
+  const user = await prisma.user.create({ data: { email, passwordHash, displayName, pseudo } })
 
   const token = signToken(user.id)
-  res.status(201).json({ token, user: { id: user.id, email: user.email, pseudo: user.pseudo } })
+  res.status(201).json({
+    token,
+    user: { id: user.id, email: user.email, displayName: user.displayName, pseudo: user.pseudo }
+  })
 })
 
 const loginSchema = z.object({
@@ -61,7 +83,10 @@ router.post('/login', async (req, res) => {
   }
 
   const token = signToken(user.id)
-  res.json({ token, user: { id: user.id, email: user.email, pseudo: user.pseudo } })
+  res.json({
+    token,
+    user: { id: user.id, email: user.email, displayName: user.displayName, pseudo: user.pseudo }
+  })
 })
 
 function signToken(userId: string): string {

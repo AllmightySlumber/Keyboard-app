@@ -164,7 +164,7 @@ export default function Accueil(): JSX.Element {
               <div key={a.id} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13.5 }}>
                 <span style={{ fontSize: 18 }}>🏆</span>
                 <span>
-                  <strong>{a.pseudo}</strong> a battu son record avec{' '}
+                  <strong>{a.displayName}</strong> a battu son record avec{' '}
                   <strong>{Math.round(a.wpm)} MPM</strong>
                 </span>
               </div>

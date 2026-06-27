@@ -9,7 +9,7 @@ export default function Login(): JSX.Element {
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [pseudo, setPseudo] = useState('')
+  const [displayName, setDisplayName] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -19,9 +19,11 @@ export default function Login(): JSX.Element {
     setLoading(true)
     try {
       const response =
-        mode === 'login' ? await login(email, password) : await register(email, password, pseudo)
+        mode === 'login' ? await login(email, password) : await register(email, password, displayName)
       setSession(response.token, response.user)
-      navigate('/classement')
+      // After signing up, land on Profil so the new account's auto-generated
+      // identifier (needed to be findable by friends) is immediately visible.
+      navigate(mode === 'register' ? '/profil' : '/classement')
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Une erreur est survenue')
     } finally {
@@ -39,12 +41,19 @@ export default function Login(): JSX.Element {
       <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 20 }}>
         {mode === 'register' && (
           <input
-            placeholder="Pseudo"
-            value={pseudo}
-            onChange={(e) => setPseudo(e.target.value)}
+            placeholder="Nom d'affichage (ex: Lucas)"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
             required
+            minLength={2}
+            maxLength={24}
             style={inputStyle}
           />
+        )}
+        {mode === 'register' && (
+          <span style={{ fontSize: 12.5, color: 'var(--color-text-muted)', marginTop: -6 }}>
+            On te générera un identifiant unique à partir de ce nom, à partager avec tes amis.
+          </span>
         )}
         <input
           type="email"

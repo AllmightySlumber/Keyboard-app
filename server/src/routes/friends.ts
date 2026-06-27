@@ -28,8 +28,8 @@ router.get('/', requireAuth, async (req: AuthedRequest, res) => {
       OR: [{ userId: req.userId }, { friendId: req.userId }]
     },
     include: {
-      user: { select: { id: true, pseudo: true } },
-      friend: { select: { id: true, pseudo: true } }
+      user: { select: { id: true, pseudo: true, displayName: true } },
+      friend: { select: { id: true, pseudo: true, displayName: true } }
     }
   })
 
@@ -41,7 +41,7 @@ router.get('/', requireAuth, async (req: AuthedRequest, res) => {
 router.get('/requests', requireAuth, async (req: AuthedRequest, res) => {
   const requests = await prisma.friendship.findMany({
     where: { friendId: req.userId, status: 'pending' },
-    include: { user: { select: { id: true, pseudo: true } } }
+    include: { user: { select: { id: true, pseudo: true, displayName: true } } }
   })
 
   res.json(requests.map((r) => ({ requestId: r.id, from: r.user })))
@@ -50,7 +50,7 @@ router.get('/requests', requireAuth, async (req: AuthedRequest, res) => {
 router.get('/blocked', requireAuth, async (req: AuthedRequest, res) => {
   const blocks = await prisma.block.findMany({
     where: { blockerId: req.userId },
-    include: { blocked: { select: { id: true, pseudo: true } } }
+    include: { blocked: { select: { id: true, pseudo: true, displayName: true } } }
   })
   res.json(blocks.map((b) => b.blocked))
 })
@@ -64,8 +64,8 @@ router.get('/activity', requireAuth, async (req: AuthedRequest, res) => {
       OR: [{ userId: req.userId }, { friendId: req.userId }]
     },
     include: {
-      user: { select: { id: true, pseudo: true } },
-      friend: { select: { id: true, pseudo: true } }
+      user: { select: { id: true, pseudo: true, displayName: true } },
+      friend: { select: { id: true, pseudo: true, displayName: true } }
     }
   })
   const friends = friendships.map((f) => (f.userId === req.userId ? f.friend : f.user))
@@ -81,7 +81,13 @@ router.get('/activity', requireAuth, async (req: AuthedRequest, res) => {
         latest && best && latest.id === best.id && latest.createdAt >= cutoff
       )
       return isNewRecord
-        ? { id: latest!.id, pseudo: friend.pseudo, wpm: latest!.wpm, createdAt: latest!.createdAt }
+        ? {
+            id: latest!.id,
+            pseudo: friend.pseudo,
+            displayName: friend.displayName,
+            wpm: latest!.wpm,
+            createdAt: latest!.createdAt
+          }
         : null
     })
   )
@@ -110,7 +116,7 @@ router.get('/search', requireAuth, async (req: AuthedRequest, res) => {
       pseudo: { equals: query.data, mode: 'insensitive' },
       id: { not: req.userId, notIn: blockedIds }
     },
-    select: { id: true, pseudo: true },
+    select: { id: true, pseudo: true, displayName: true },
     take: 10
   })
 

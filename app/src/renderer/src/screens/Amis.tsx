@@ -105,7 +105,7 @@ export default function Amis(): JSX.Element {
 
   async function onRemove(friend: FriendUser): Promise<void> {
     if (!token) return
-    if (!window.confirm(`Retirer ${friend.pseudo} de tes amis ?`)) return
+    if (!window.confirm(`Retirer ${friend.displayName} de tes amis ?`)) return
     try {
       await removeFriend(token, friend.id)
       refresh()
@@ -116,7 +116,7 @@ export default function Amis(): JSX.Element {
 
   async function onBlock(friend: FriendUser): Promise<void> {
     if (!token) return
-    if (!window.confirm(`Bloquer ${friend.pseudo} ? Cette personne ne pourra plus t'ajouter ni t'écrire.`)) return
+    if (!window.confirm(`Bloquer ${friend.displayName} ? Cette personne ne pourra plus t'ajouter ni t'écrire.`)) return
     try {
       await blockUser(token, friend.id)
       refresh()
@@ -174,7 +174,7 @@ export default function Amis(): JSX.Element {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Chercher un pseudo…"
+          placeholder="Chercher un identifiant (ex: lucas164)…"
           style={{ flex: 1, padding: '10px 14px', borderRadius: 10, border: '1px solid var(--color-border)' }}
         />
         <button
@@ -200,7 +200,10 @@ export default function Amis(): JSX.Element {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 16 }}>
           {results.map((user) => (
             <div key={user.id} style={cardStyle}>
-              <span style={{ flex: 1, fontWeight: 600 }}>{user.pseudo}</span>
+              <span style={{ flex: 1 }}>
+                <span style={{ fontWeight: 600 }}>{user.displayName}</span>{' '}
+                <span style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>({user.pseudo})</span>
+              </span>
               <button
                 onClick={() => onAdd(user.id)}
                 style={{
@@ -226,7 +229,7 @@ export default function Amis(): JSX.Element {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10 }}>
             {requests.map((r) => (
               <div key={r.requestId} style={cardStyle}>
-                <span style={{ flex: 1, fontWeight: 600 }}>{r.from.pseudo}</span>
+                <span style={{ flex: 1, fontWeight: 600 }}>{r.from.displayName}</span>
                 <button
                   onClick={() => onAccept(r.requestId)}
                   style={{
@@ -267,7 +270,7 @@ export default function Amis(): JSX.Element {
         </h2>
         {friends.length === 0 ? (
           <p style={{ color: 'var(--color-text-muted)', marginTop: 10, fontSize: 13.5 }}>
-            Aucun ami pour l'instant — cherche un pseudo ci-dessus pour envoyer une demande.
+            Aucun ami pour l'instant — cherche un identifiant ci-dessus pour envoyer une demande.
           </p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10 }}>
@@ -288,12 +291,12 @@ export default function Amis(): JSX.Element {
                       fontSize: 12
                     }}
                   >
-                    {f.pseudo.slice(0, 2).toUpperCase()}
+                    {f.displayName.slice(0, 2).toUpperCase()}
                   </div>
-                  <span style={{ flex: 1, fontWeight: 600 }}>{f.pseudo}</span>
+                  <span style={{ flex: 1, fontWeight: 600 }}>{f.displayName}</span>
                   <Link
                     to={`/amis/${f.id}`}
-                    state={{ pseudo: f.pseudo }}
+                    state={{ displayName: f.displayName }}
                     style={{
                       padding: '8px 12px',
                       borderRadius: 10,
@@ -330,7 +333,7 @@ export default function Amis(): JSX.Element {
                       autoFocus
                       value={reportReason}
                       onChange={(e) => setReportReason(e.target.value)}
-                      placeholder={`Pourquoi signaler ${f.pseudo} ?`}
+                      placeholder={`Pourquoi signaler ${f.displayName} ?`}
                       style={{
                         flex: 1,
                         padding: '8px 12px',
@@ -374,7 +377,7 @@ export default function Amis(): JSX.Element {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10 }}>
             {blocked.map((u) => (
               <div key={u.id} style={cardStyle}>
-                <span style={{ flex: 1, fontWeight: 600 }}>{u.pseudo}</span>
+                <span style={{ flex: 1, fontWeight: 600 }}>{u.displayName}</span>
                 <button onClick={() => onUnblock(u)} style={ghostButtonStyle}>
                   Débloquer
                 </button>

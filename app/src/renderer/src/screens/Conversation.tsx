@@ -8,7 +8,7 @@ const POLL_INTERVAL_MS = 4000
 export default function Conversation(): JSX.Element {
   const { friendId } = useParams<{ friendId: string }>()
   const location = useLocation()
-  const pseudo = (location.state as { pseudo?: string } | null)?.pseudo ?? 'Ami'
+  const displayName = (location.state as { displayName?: string } | null)?.displayName ?? 'Ami'
   const token = useAuthStore((s) => s.token)
   const userId = useAuthStore((s) => s.user?.id)
   const [messages, setMessages] = useState<Message[]>([])
@@ -77,7 +77,7 @@ export default function Conversation(): JSX.Element {
         <Link to="/amis" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: 13 }}>
           ← Amis
         </Link>
-        <h1 style={{ fontFamily: 'var(--font-heading)', margin: 0 }}>{pseudo}</h1>
+        <h1 style={{ fontFamily: 'var(--font-heading)', margin: 0 }}>{displayName}</h1>
       </div>
 
       <div

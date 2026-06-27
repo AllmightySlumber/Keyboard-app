@@ -8,12 +8,12 @@ router.get('/top', requireAuth, async (_req, res) => {
   const sessions = await prisma.typingSession.findMany({
     orderBy: { wpm: 'desc' },
     take: 5,
-    include: { user: { select: { pseudo: true } } }
+    include: { user: { select: { displayName: true } } }
   })
 
   res.json(
     sessions.map((s) => ({
-      pseudo: s.user.pseudo,
+      displayName: s.user.displayName,
       wpm: s.wpm,
       accuracy: s.accuracy
     }))

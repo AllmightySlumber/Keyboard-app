@@ -61,7 +61,7 @@ export default function Classement(): JSX.Element {
             }}
           >
             <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, width: 24 }}>{i + 1}</span>
-            <span style={{ flex: 1, fontWeight: 600 }}>{entry.pseudo}</span>
+            <span style={{ flex: 1, fontWeight: 600 }}>{entry.displayName}</span>
             <span style={{ color: 'var(--color-text-muted)', fontSize: 13.5 }}>{entry.accuracy}%</span>
             <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700 }}>{entry.wpm} MPM</span>
           </div>
