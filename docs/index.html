@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clavier — Apprends à taper plus vite</title>
+    <meta
+      name="description"
+      content="Clavier est une application gratuite et multiplateforme pour apprendre la dactylographie, suivre tes statistiques et te comparer à tes amis."
+    />
+    <style>
+      :root {
+        --primary: #7c5cf0;
+        --primary-dark: #9a3fd6;
+        --bg: #f7f6fb;
+        --text: #1f1b2e;
+        --text-muted: #6b6478;
+        --border: #e4e1ee;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: -apple-system, "Plus Jakarta Sans", Segoe UI, Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .hero {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: #fff;
+        padding: 72px 24px 96px;
+        text-align: center;
+      }
+      .logo {
+        width: 96px;
+        height: 96px;
+        border-radius: 22px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      }
+      h1 {
+        font-size: 40px;
+        margin: 24px 0 8px;
+      }
+      .tagline {
+        font-size: 18px;
+        opacity: 0.9;
+        max-width: 560px;
+        margin: 0 auto 36px;
+      }
+      .downloads {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        justify-content: center;
+      }
+      .btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #fff;
+        color: var(--primary-dark);
+        border-radius: 12px;
+        padding: 14px 24px;
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 15px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+        transition: transform 0.1s;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        box-shadow: none;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+      }
+      main {
+        max-width: 880px;
+        margin: -48px auto 0;
+        padding: 0 24px 80px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px rgba(20, 10, 50, 0.06);
+      }
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-top: 16px;
+      }
+      .feature h3 {
+        font-size: 16px;
+        margin: 0 0 6px;
+      }
+      .feature p {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin: 0;
+        line-height: 1.5;
+      }
+      footer {
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 13px;
+        padding: 24px;
+      }
+      footer a {
+        color: var(--primary-dark);
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <img class="logo" src="assets/logo.png" alt="Logo Clavier" />
+      <h1>Clavier</h1>
+      <p class="tagline">
+        Apprends à taper plus vite, choisis ta disposition de clavier, suis ta
+        progression et défie tes amis — gratuitement, sur Mac, Windows et Linux.
+      </p>
+      <div class="downloads">
+        <a class="btn" href="https://github.com/AllmightySlumber/Keyboard-app/releases/latest/download/Clavier-mac.dmg">
+           Télécharger pour Mac
+        </a>
+        <a class="btn" href="https://github.com/AllmightySlumber/Keyboard-app/releases/latest/download/Clavier-win.exe">
+           Télécharger pour Windows
+        </a>
+        <a class="btn" href="https://github.com/AllmightySlumber/Keyboard-app/releases/latest/download/Clavier-linux.AppImage">
+           Télécharger pour Linux
+        </a>
+      </div>
+      <div style="margin-top: 14px">
+        <a class="btn btn-secondary" href="https://github.com/AllmightySlumber/Keyboard-app/releases/latest">
+          Voir toutes les versions sur GitHub
+        </a>
+      </div>
+    </section>
+
+    <main>
+      <div class="card">
+        <h2>Pourquoi Clavier&nbsp;?</h2>
+        <div class="features">
+          <div class="feature">
+            <h3>Ta disposition, ton choix</h3>
+            <p>AZERTY, QWERTY, QWERTZ ou Bépo — apprends avec le clavier que tu utilises vraiment.</p>
+          </div>
+          <div class="feature">
+            <h3>Leçons par doigt</h3>
+            <p>Des exercices ciblés pour muscler chaque doigt et progresser méthodiquement.</p>
+          </div>
+          <div class="feature">
+            <h3>Stats qui te suivent</h3>
+            <p>Connecte-toi pour retrouver ta vitesse, ta précision et ton historique partout.</p>
+          </div>
+          <div class="feature">
+            <h3>Amis &amp; classement</h3>
+            <p>Ajoute des amis, compare vos scores, et reçois une notification quand l'un d'eux bat son record.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Note sur le premier lancement</h2>
+        <p>
+          L'application n'est pas encore signée numériquement (certificat payant non
+          encore mis en place). Au premier lancement, ton système peut afficher un
+          avertissement de sécurité :
+        </p>
+        <ul>
+          <li><strong>Mac</strong> : clic droit sur l'app → « Ouvrir » (au lieu d'un double-clic)</li>
+          <li><strong>Windows</strong> : cliquer sur « Informations complémentaires » → « Exécuter quand même »</li>
+        </ul>
+      </div>
+    </main>
+
+    <footer>
+      Projet open source — <a href="https://github.com/AllmightySlumber/Keyboard-app">code source sur GitHub</a>
+    </footer>
+  </body>
+</html>

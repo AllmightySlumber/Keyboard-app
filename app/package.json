@@ -39,19 +39,27 @@
     "directories": {
       "output": "dist"
     },
+    "publish": {
+      "provider": "github",
+      "owner": "AllmightySlumber",
+      "repo": "Keyboard-app"
+    },
     "files": [
       "out/**/*"
     ],
     "mac": {
       "target": "dmg",
-      "category": "public.app-category.education"
+      "category": "public.app-category.education",
+      "artifactName": "Clavier-mac.${ext}"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "artifactName": "Clavier-win.${ext}"
     },
     "linux": {
       "target": "AppImage",
-      "category": "Education"
+      "category": "Education",
+      "artifactName": "Clavier-linux.${ext}"
     }
   }
 }
