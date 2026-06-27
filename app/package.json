@@ -43,7 +43,8 @@
     "publish": {
       "provider": "github",
       "owner": "AllmightySlumber",
-      "repo": "Keyboard-app"
+      "repo": "Keyboard-app",
+      "releaseType": "release"
     },
     "files": [
       "out/**/*"
