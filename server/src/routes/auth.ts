@@ -8,20 +8,32 @@ const router = Router()
 
 const registerSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z
+    .string()
+    .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
+    .regex(/[a-z]/, 'Le mot de passe doit contenir une lettre minuscule')
+    .regex(/[A-Z]/, 'Le mot de passe doit contenir une lettre majuscule')
+    .regex(/[0-9]/, 'Le mot de passe doit contenir un chiffre'),
   pseudo: z.string().min(3).max(24)
 })
 
 router.post('/register', async (req, res) => {
   const parsed = registerSchema.safeParse(req.body)
   if (!parsed.success) {
-    return res.status(400).json({ error: parsed.error.flatten() })
+    const firstIssue = parsed.error.issues[0]
+    return res.status(400).json({ error: firstIssue?.message ?? 'Données invalides' })
   }
   const { email, password, pseudo } = parsed.data
 
-  const existing = await prisma.user.findUnique({ where: { email } })
-  if (existing) {
-    return res.status(409).json({ error: 'Email already in use' })
+  const [existingEmail, existingPseudo] = await Promise.all([
+    prisma.user.findUnique({ where: { email } }),
+    prisma.user.findUnique({ where: { pseudo } })
+  ])
+  if (existingEmail) {
+    return res.status(409).json({ error: 'Cet email est déjà utilisé' })
+  }
+  if (existingPseudo) {
+    return res.status(409).json({ error: 'Ce pseudo est déjà pris' })
   }
 
   const passwordHash = await bcrypt.hash(password, 10)
@@ -39,13 +51,13 @@ const loginSchema = z.object({
 router.post('/login', async (req, res) => {
   const parsed = loginSchema.safeParse(req.body)
   if (!parsed.success) {
-    return res.status(400).json({ error: parsed.error.flatten() })
+    return res.status(400).json({ error: 'Email ou mot de passe manquant' })
   }
   const { email, password } = parsed.data
 
   const user = await prisma.user.findUnique({ where: { email } })
   if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
-    return res.status(401).json({ error: 'Invalid credentials' })
+    return res.status(401).json({ error: 'Email ou mot de passe incorrect' })
   }
 
   const token = signToken(user.id)

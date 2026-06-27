@@ -22,6 +22,11 @@ app.use('/friends', friendsRoutes)
 app.use('/sessions', sessionsRoutes)
 app.use('/messages', messagesRoutes)
 
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error(err)
+  res.status(500).json({ error: 'Une erreur est survenue' })
+})
+
 const port = process.env.PORT ?? 4000
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`)

@@ -61,8 +61,19 @@ export default function Login(): JSX.Element {
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={8}
+          pattern={mode === 'register' ? '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}' : undefined}
+          title={
+            mode === 'register'
+              ? 'Au moins 8 caractères, avec une minuscule, une majuscule et un chiffre'
+              : undefined
+          }
           style={inputStyle}
         />
+        {mode === 'register' && (
+          <span style={{ fontSize: 12.5, color: 'var(--color-text-muted)', marginTop: -6 }}>
+            Au moins 8 caractères, avec une minuscule, une majuscule et un chiffre.
+          </span>
+        )}
 
         {error && <div style={{ color: 'oklch(0.55 0.2 28)', fontSize: 13.5 }}>{error}</div>}
 
